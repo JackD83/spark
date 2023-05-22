@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import spark.utils.GzipUtils;
+import spark.NoOP;
 import spark.serialization.SerializerChain;
 
 /**
@@ -53,6 +54,7 @@ final class Body {
     }
 
     public void set(Object content) {
+    	
         this.content = content;
     }
 
@@ -60,7 +62,7 @@ final class Body {
                             SerializerChain serializerChain,
                             HttpServletRequest httpRequest) throws IOException {
 
-        if (!httpResponse.isCommitted()) {
+        if (!httpResponse.isCommitted() && !(content instanceof NoOP)) {
             if (httpResponse.getContentType() == null) {
                 httpResponse.setContentType("text/html; charset=utf-8");
             }
